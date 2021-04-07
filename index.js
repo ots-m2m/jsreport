@@ -17,7 +17,7 @@ if (!semver.satisfies(process.versions.node, packageJson.engines.node)) {
   process.exit(1)
 }
 
-const extend = require('node.extend.without.arrays')
+const extend = require('node.extend')
 const path = require('path')
 const core = require('jsreport-core')
 const main = require('./lib/main')
