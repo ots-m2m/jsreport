@@ -51,7 +51,7 @@ RUN echo "ANYONE5"
 RUN    curl -Lo phantomjs.tar.bz2 https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2 && \
     tar jxvf phantomjs.tar.bz2 && \
     chmod +x phantomjs-1.9.8-linux-x86_64/bin/phantomjs && \
-    sudo mv phantomjs-1.9.8-linux-x86_64/bin/phantomjs /usr/local/bin/ && \
+    mv phantomjs-1.9.8-linux-x86_64/bin/phantomjs /usr/local/bin/ && \
     rm -rf phantomjs* 
     #&& \
     # cleanup
