@@ -34,7 +34,7 @@ RUN adduser --disabled-password --gecos "" jsreport && \
     apt-get update && \
     apt-get install -y google-chrome-unstable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst --no-install-recommends && \
     # phantomjs
-    curl -Lo phantomjs.tar.bz2 https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2 && \
+    wget -o phantomjs.tar.bz2 https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2 && \
     tar jxvf phantomjs.tar.bz2 && \
     chmod +x phantomjs-1.9.8-linux-x86_64/bin/phantomjs && \
     mv phantomjs-1.9.8-linux-x86_64/bin/phantomjs /usr/local/bin/ && \
