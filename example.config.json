@@ -13,10 +13,6 @@
   "chrome": {
     "timeout": 30000
   },
-  "certificate": {
-    "key": "/etc/certs/config.iotedge01.evoenergy.com.au.key",
-    "cert": "/etc/certs/config.iotedge01.evoenergy.com.au.crt"
-   },
   "extensions": {
     "authentication" : {
       "cookieSession": {
