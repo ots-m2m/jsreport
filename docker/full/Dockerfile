@@ -36,7 +36,7 @@ RUN echo "ANYONE3"
 RUN    curl -sL https://deb.nodesource.com/setup_17.x | bash - && \
     apt-get update && \
     apt-get install -y --no-install-recommends nodejs && \
-    npm i -g npm 
+    npm i -g npm@latest 
     #&& \
     # chrome
 RUN echo "ANYONE4"
@@ -70,8 +70,10 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 RUN npm install -g jsreport-cli && \
     jsreport init && \
     npm uninstall -g jsreport-cli
-RUN npm install -g node-gyp 
-RUN npm install -g node-pre-gyp    
+RUN npm install -g node-gyp@latest 
+RUN npm install -g node-pre-gyp@latest 
+RUN npm config set node_gyp $(npm prefix -g)/lib/node_modules/node-gyp/bin/node-gyp.js
+   
 RUN npm install --save --save-exact jsreport-ejs 
 #\
 RUN npm install --save         jsreport-pug 
