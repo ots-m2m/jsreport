@@ -23,9 +23,11 @@ RUN    apt-get install -y --no-install-recommends libgtk2.0-dev \
 RUN echo "ANYONE2"
 RUN    apt-get install -y default-jre unzip 
 #&& \
-RUN    wget -o fop.zip apache.miloslavbrada.cz/xmlgraphics/fop/binaries/fop-2.1-bin.zip && \
-    unzip fop.zip && \
-    rm fop.zip 
+RUN    wget -o fop.zip apache.miloslavbrada.cz/xmlgraphics/fop/binaries/fop-2.1-bin.zip 
+#&& \
+RUN    unzip fop.zip 
+#&& \
+RUN    rm fop.zip 
     #&& \
 RUN    chmod +x fop-2.1/fop 
     ##&& \
