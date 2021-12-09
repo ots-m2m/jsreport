@@ -13,7 +13,7 @@ jobs:
       - run: docker build --rm=false -t gridthings/jsreport ./docker/full
       - deploy:
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            if [ "${CIRCLE_BRANCH}" == "jsreport-test" ]; then
               apk update
               apk add py-pip
               pip install awscli

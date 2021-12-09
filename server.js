@@ -5,6 +5,7 @@ if (process.env.JSREPORT_CLI) {
 } else {
   jsreport.init().then(() => {
   }).catch((e) => {
+    console.log("Error:",e)
     console.trace(e)
     process.exit(1)
   })
