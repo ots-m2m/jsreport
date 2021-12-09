@@ -10,7 +10,7 @@ jobs:
       - run: git submodule sync --recursive
       - run: git submodule update --recursive --init
       - run: docker info
-      - run: docker build --rm=false -t gridthings/jsreport ./docker/full
+      - run: docker build --rm=false -t gridthings/jsreport ./docker/default
       - deploy:
           command: |
             if [ "${CIRCLE_BRANCH}" == "jsreport-test" ]; then
