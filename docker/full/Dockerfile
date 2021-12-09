@@ -3,11 +3,13 @@ FROM ubuntu:xenial
 # (it contains a newer version of OpenSSL which can not be used with phantomjs)
 EXPOSE 5488
 
-RUN sudo adduser --disabled-password --gecos "" jsreport && \
+RUN adduser --disabled-password --gecos "" jsreport && \
     apt-get update && \   
-    apt-get install -y --no-install-recommends libgconf-2-4 gnupg git curl wget ca-certificates && \   
+    apt-get install -y --no-install-recommends libgconf-2-4 gnupg git curl wget ca-certificates 
+    # && \   
     # phantom/electron
-    apt-get install -y --no-install-recommends libgtk2.0-dev \
+RUN echo "ANYONE1"
+RUN    apt-get install -y --no-install-recommends libgtk2.0-dev \
         libxtst-dev \
         libxss1 \
         libgconf2-dev \
@@ -15,32 +17,42 @@ RUN sudo adduser --disabled-password --gecos "" jsreport && \
         libasound2-dev \
         xvfb \
         xfonts-75dpi \
-        xfonts-base && \           
+        xfonts-base 
+        #&& \           
     # java fop
-    apt-get install -y default-jre unzip && \
+RUN echo "ANYONE2"
+RUN    apt-get install -y default-jre unzip && \
     wget -o fop.zip apache.miloslavbrada.cz/xmlgraphics/fop/binaries/fop-2.1-bin.zip && \
     unzip fop.zip && \
     rm fop.zip && \
-    chmod +x fop-2.1/fop && \
+    chmod +x fop-2.1/fop 
+    ##&& \
     # node
-    curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+RUN echo "ANYONE3"
+RUN    curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     apt-get update && \
     apt-get install -y --no-install-recommends nodejs && \
-    npm i -g npm && \
+    npm i -g npm 
+    #&& \
     # chrome
-    apt-get install -y libgconf-2-4 && \
+RUN echo "ANYONE4"
+RUN    apt-get install -y libgconf-2-4 && \
     wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
     sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
     apt-get update && \
-    apt-get install -y google-chrome-unstable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst --no-install-recommends && \
+    apt-get install -y google-chrome-unstable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst --no-install-recommends 
+    #&& \
     # phantomjs
-    curl -Lo phantomjs.tar.bz2 https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2 && \
+RUN echo "ANYONE5"
+RUN    curl -Lo phantomjs.tar.bz2 https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2 && \
     tar jxvf phantomjs.tar.bz2 && \
     chmod +x phantomjs-1.9.8-linux-x86_64/bin/phantomjs && \
-    mv phantomjs-1.9.8-linux-x86_64/bin/phantomjs /usr/local/bin/ && \
-    rm -rf phantomjs* && \
+    sudo mv phantomjs-1.9.8-linux-x86_64/bin/phantomjs /usr/local/bin/ && \
+    rm -rf phantomjs* 
+    #&& \
     # cleanup
-    rm -rf /var/lib/apt/lists/* /var/cache/apt/* && \   
+RUN echo "ANYONE6"
+RUN    rm -rf /var/lib/apt/lists/* /var/cache/apt/* && \   
     rm -rf /src/*.deb    
 
 VOLUME ["/jsreport"]
