@@ -21,20 +21,21 @@ RUN    apt-get install -y --no-install-recommends libgtk2.0-dev \
         #&& \           
     # java fop
 RUN echo "ANYONE2"
-RUN    apt-get install -y default-jre unzip && \
-    wget -o fop.zip apache.miloslavbrada.cz/xmlgraphics/fop/binaries/fop-2.1-bin.zip && \
-    unzip fop.zip && \
-    rm fop.zip && \
-    chmod +x fop-2.1/fop 
-    ##&& \
-    # node
-RUN echo "ANYONE3"
 RUN    curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     apt-get update && \
     apt-get install -y --no-install-recommends nodejs && \
     npm i -g npm 
     #&& \
     # chrome
+RUN echo "ANYONE3"
+
+    RUN    apt-get install -y default-jre unzip && \
+    wget -o fop.zip apache.miloslavbrada.cz/xmlgraphics/fop/binaries/fop-2.1-bin.zip && \
+    unzip fop.zip && \
+    rm fop.zip && \
+    chmod +x fop-2.1/fop 
+    ##&& \
+    # node
 RUN echo "ANYONE4"
 RUN    apt-get install -y libgconf-2-4 && \
     wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
