@@ -33,7 +33,7 @@ RUN    chmod +x fop-2.1/fop
     ##&& \
     # node
 RUN echo "ANYONE3"
-RUN    curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
+RUN    curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get update && \
     apt-get install -y --no-install-recommends nodejs && \
     npm i -g npm 
