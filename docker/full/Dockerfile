@@ -3,7 +3,7 @@ FROM ubuntu:xenial
 # (it contains a newer version of OpenSSL which can not be used with phantomjs)
 EXPOSE 5488
 
-RUN adduser --disabled-password --gecos "" jsreport && \
+RUN sudo adduser --disabled-password --gecos "" jsreport && \
     apt-get update && \   
     apt-get install -y --no-install-recommends libgconf-2-4 gnupg git curl wget ca-certificates && \   
     # phantom/electron
@@ -37,7 +37,7 @@ RUN adduser --disabled-password --gecos "" jsreport && \
     curl -Lo phantomjs.tar.bz2 https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2 && \
     tar jxvf phantomjs.tar.bz2 && \
     chmod +x phantomjs-1.9.8-linux-x86_64/bin/phantomjs && \
-    sudo mv phantomjs-1.9.8-linux-x86_64/bin/phantomjs /usr/local/bin/ && \
+    mv phantomjs-1.9.8-linux-x86_64/bin/phantomjs /usr/local/bin/ && \
     rm -rf phantomjs* && \
     # cleanup
     rm -rf /var/lib/apt/lists/* /var/cache/apt/* && \   
