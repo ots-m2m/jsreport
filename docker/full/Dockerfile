@@ -21,7 +21,7 @@ RUN adduser --disabled-password --gecos "" jsreport && \
     curl -o fop.zip https://dlcdn.apache.org//xmlgraphics/fop/binaries/fop-2.6-bin.zip && \
     unzip fop.zip && \
     rm fop.zip && \
-    chmod +x fop-2.1/fop && \
+    chmod +x fop-2.6/fop && \
     # node
     curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     apt-get update && \
