@@ -54,6 +54,8 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 RUN npm install -g jsreport-cli && \
     jsreport init && \
     npm uninstall -g jsreport-cli
+
+RUN npm install -g --save node-pre-gyp 
     
 RUN npm install --save --save-exact jsreport-ejs 
 #\
