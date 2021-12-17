@@ -55,35 +55,63 @@ RUN npm install -g jsreport-cli && \
     jsreport init && \
     npm uninstall -g jsreport-cli
     
-RUN npm install --save --save-exact jsreport-ejs \
-        jsreport-pug \    
-        jsreport-azure-storage \
-        jsreport-pdf-password \       
-        jsreport-phantom-pdf \
-        jsreport-phantom-image \
-        jsreport-mssql-store \
-        jsreport-postgres-store \
-        jsreport-mongodb-store \
-        jsreport-wkhtmltopdf \
-        jsreport-html-to-text \
-        jsreport-fop-pdf \
-        jsreport-html-embedded-in-docx \
-        jsreport-fs-store-aws-s3-persistence \
-        jsreport-fs-store-azure-storage-persistence \
-        jsreport-fs-store-azure-sb-sync \
-        jsreport-fs-store-aws-sns-sync \
-	jsreport-debug \
-        promise-serial \
-        electron \
-        jsreport-electron-pdf \    
-        phantomjs-exact-2-1-1 \
-        request \
-	moment \
-        nodemailer \
-	inline-css \
-        @google/maps \
-	aws-smtp-credentials \
-        moment-timezone \
+RUN npm install --save --save-exact jsreport-ejs 
+#\
+RUN npm install --save --save-exact        jsreport-pug 
+#\    
+RUN npm install --save --save-exact        jsreport-azure-storage 
+#\
+RUN npm install --save --save-exact        jsreport-pdf-password 
+#\       
+RUN npm install --save --save-exact        jsreport-phantom-pdf 
+#\
+RUN npm install --save --save-exact        jsreport-phantom-image 
+#\
+RUN npm install --save --save-exact        jsreport-mssql-store 
+#\
+RUN npm install --save --save-exact        jsreport-postgres-store 
+#\
+RUN npm install --save --save-exact        jsreport-mongodb-store 
+#\
+RUN npm install --save --save-exact        jsreport-wkhtmltopdf 
+#\
+RUN npm install --save --save-exact        jsreport-html-to-text 
+#\
+RUN npm install --save --save-exact        jsreport-fop-pdf 
+#\
+RUN npm install --save --save-exact        jsreport-html-embedded-in-docx 
+#\
+RUN npm install --save --save-exact        jsreport-fs-store-aws-s3-persistence 
+#\
+RUN npm install --save --save-exact        jsreport-fs-store-azure-storage-persistence 
+#\
+RUN npm install --save --save-exact        jsreport-fs-store-azure-sb-sync 
+#\
+RUN npm install --save --save-exact        jsreport-fs-store-aws-sns-sync 
+#\
+RUN npm install --save --save-exact	jsreport-debug 
+#\
+RUN npm install --save --save-exact        promise-serial 
+#\
+RUN npm install --save --save-exact        electron 
+#\
+RUN npm install --save --save-exact        jsreport-electron-pdf 
+#\    
+RUN npm install --save --save-exact        phantomjs-exact-2-1-1 
+#\
+RUN npm install --save --save-exact        request 
+#\
+RUN npm install --save --save-exact	moment 
+#\
+RUN npm install --save --save-exact        nodemailer 
+#\
+RUN npm install --save --save-exact	inline-css 
+#\
+RUN npm install --save --save-exact        @google/maps 
+#\
+RUN npm install --save --save-exact	aws-smtp-credentials 
+#\
+RUN npm install --save --save-exact        moment-timezone \
     && \    
     npm cache clean -f && \  
     rm -rf /tmp/*
