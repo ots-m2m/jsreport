@@ -23,7 +23,7 @@ RUN adduser --disabled-password --gecos "" jsreport && \
     rm fop.zip && \
     chmod +x fop-2.6/fop && \
     # node
-    curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
     apt-get update && \
     apt-get install -y --no-install-recommends nodejs && \
     npm i -g npm && \
@@ -51,54 +51,54 @@ WORKDIR /app
 # the chrome was already installed from apt-get
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true  
 
-RUN npm install -g jsreport-cli && \
+RUN npm install -g jsreport-cli@2.0.7 && \
     jsreport init && \
-    npm uninstall -g jsreport-cli
+    npm uninstall -g jsreport-cli@2.0.7
 
 RUN npm install --global node-gyp
 RUN npm install --global node-pre-gyp
     
-RUN npm install --save --save-exact jsreport-ejs 
+RUN npm install --save --save-exact jsreport-ejs@2.1.0 
 #\
-RUN npm install --save --save-exact        jsreport-pug 
+RUN npm install --save --save-exact        jsreport-pug@3.1.0 
 #\    
-RUN npm install --save --save-exact        jsreport-azure-storage@1.1.0
+RUN npm install --save --save-exact        jsreport-azure-storage@1.0.1 
 #\
-#RUN npm install --save --save-exact        jsreport-pdf-password 
+RUN npm install --save --save-exact        jsreport-pdf-password@2.1.0 
 #\       
-RUN npm install --save --save-exact        jsreport-phantom-pdf 
+RUN npm install --save --save-exact        jsreport-phantom-pdf@2.2.0 
 #\
-RUN npm install --save --save-exact        jsreport-phantom-image 
+RUN npm install --save --save-exact        jsreport-phantom-image@2.0.1 
 #\
-RUN npm install --save --save-exact        jsreport-mssql-store 
+RUN npm install --save --save-exact        jsreport-mssql-store@1.2.3 
 #\
-RUN npm install --save --save-exact        jsreport-postgres-store 
+RUN npm install --save --save-exact        jsreport-postgres-store@1.2.3 
 #\
-RUN npm install --save --save-exact        jsreport-mongodb-store 
+RUN npm install --save --save-exact        jsreport-mongodb-store@1.2.2 
 #\
-RUN npm install --save --save-exact        jsreport-wkhtmltopdf 
+RUN npm install --save --save-exact        jsreport-wkhtmltopdf@2.1.0 
 #\
-RUN npm install --save --save-exact        jsreport-html-to-text 
+RUN npm install --save --save-exact        jsreport-html-to-text@2.0.2 
 #\
-RUN npm install --save --save-exact        jsreport-fop-pdf 
+RUN npm install --save --save-exact        jsreport-fop-pdf@2.1.0 
 #\
-RUN npm install --save --save-exact        jsreport-html-embedded-in-docx 
+RUN npm install --save --save-exact        jsreport-html-embedded-in-docx@1.1.0 
 #\
-RUN npm install --save --save-exact        jsreport-fs-store-aws-s3-persistence 
+RUN npm install --save --save-exact        jsreport-fs-store-aws-s3-persistence@1.3.0 
 #\
-RUN npm install --save --save-exact        jsreport-fs-store-azure-storage-persistence@1.1.0 
+RUN npm install --save --save-exact        jsreport-fs-store-azure-storage-persistence@1.0.5 
 #\
-RUN npm install --save --save-exact        jsreport-fs-store-azure-sb-sync 
+RUN npm install --save --save-exact        jsreport-fs-store-azure-sb-sync@1.0.2 
 #\
-RUN npm install --save --save-exact        jsreport-fs-store-aws-sns-sync 
+RUN npm install --save --save-exact        jsreport-fs-store-aws-sns-sync@1.0.2 
 #\
-RUN npm install --save --save-exact	jsreport-debug 
+RUN npm install --save --save-exact	jsreport-debug@2.0.2 
 #\
 RUN npm install --save --save-exact        promise-serial 
 #\
 RUN npm install --save --save-exact        electron 
 #\
-RUN npm install --save --save-exact        jsreport-electron-pdf 
+RUN npm install --save --save-exact        jsreport-electron-pdf@3.0.0 
 #\    
 RUN npm install --save --save-exact        phantomjs-exact-2-1-1 
 #\
