@@ -64,7 +64,7 @@ RUN npm install --save --save-exact        jsreport-pug@3.1.0
 #\    
 RUN npm install --save --save-exact        jsreport-azure-storage@1.0.1 
 #\
-RUN npm install --save --save-exact        jsreport-pdf-password@2.1.0 
+#RUN npm install --save --save-exact        jsreport-pdf-password@2.1.0 
 #\       
 RUN npm install --save --save-exact        jsreport-phantom-pdf@2.2.0 
 #\
