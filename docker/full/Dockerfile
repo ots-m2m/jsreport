@@ -62,7 +62,7 @@ RUN npm install --save --save-exact jsreport-ejs
 #\
 RUN npm install --save --save-exact        jsreport-pug 
 #\    
-RUN npm install --save --save-exact        jsreport-azure-storage 
+RUN npm install --save --save-exact        jsreport-azure-storage@1.1.0
 #\
 #RUN npm install --save --save-exact        jsreport-pdf-password 
 #\       
@@ -86,7 +86,7 @@ RUN npm install --save --save-exact        jsreport-html-embedded-in-docx
 #\
 RUN npm install --save --save-exact        jsreport-fs-store-aws-s3-persistence 
 #\
-RUN npm install --save --save-exact        jsreport-fs-store-azure-storage-persistence 
+RUN npm install --save --save-exact        jsreport-fs-store-azure-storage-persistence@1.1.0 
 #\
 RUN npm install --save --save-exact        jsreport-fs-store-azure-sb-sync 
 #\
