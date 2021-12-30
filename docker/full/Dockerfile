@@ -23,7 +23,7 @@ RUN adduser --disabled-password --gecos "" jsreport && \
     rm fop.zip && \
     chmod +x fop-2.6/fop && \
     # node
-    curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get update && \
     apt-get install -y --no-install-recommends nodejs && \
     npm i -g npm && \
