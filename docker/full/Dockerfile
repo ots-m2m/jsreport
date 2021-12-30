@@ -3,7 +3,7 @@ FROM ubuntu:xenial
 # (it contains a newer version of OpenSSL which can not be used with phantomjs)
 EXPOSE 5488
 
-RUN rm package-json.lock
+
 RUN rm -r node_modules
 RUN adduser --disabled-password --gecos "" jsreport && \
     apt-get update && \   
