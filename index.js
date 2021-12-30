@@ -7,7 +7,7 @@
 var semver = require('semver')
 var packageJson = require('./package.json')
 
-if (!semver.satisfies(process.versions.node, packageJson.engines.node)) {
+/*if (!semver.satisfies(process.versions.node, packageJson.engines.node)) {
   console.error(
     'jsreport requires to have installed a nodejs version of at least ' +
     packageJson.engines.node +
@@ -15,7 +15,7 @@ if (!semver.satisfies(process.versions.node, packageJson.engines.node)) {
   )
 
   process.exit(1)
-}
+}*/
 
 const extend = require('node.extend')
 const path = require('path')
