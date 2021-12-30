@@ -3,8 +3,6 @@ FROM ubuntu:xenial
 # (it contains a newer version of OpenSSL which can not be used with phantomjs)
 EXPOSE 5488
 
-
-RUN rm -r node_modules
 RUN adduser --disabled-password --gecos "" jsreport && \
     apt-get update && \   
     apt-get install -y --no-install-recommends libgconf-2-4 gnupg git curl wget ca-certificates && \   
@@ -25,7 +23,7 @@ RUN adduser --disabled-password --gecos "" jsreport && \
     rm fop.zip && \
     chmod +x fop-2.6/fop && \
     # node
-    curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_17.x | bash - && \
     apt-get update && \
     apt-get install -y --no-install-recommends nodejs && \
     npm i -g npm && \
