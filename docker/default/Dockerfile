@@ -4,9 +4,11 @@ EXPOSE 5488
 RUN addgroup --system jsreport && adduser --system --ingroup jsreport jsreport
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-      chromium-driver \
-      chromium-common \
+    apt-get install -y --no-install-recommends wget gnupg && \
+    wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends google-chrome-stable \
       git \
       bash \
       ca-certificates \
@@ -35,7 +37,7 @@ ADD run.sh /app/run.sh
 COPY . /app
 
 ENV NODE_ENV production
-ENV chrome:launchOptions:executablePath /usr/bin/chromium
+ENV chrome:launchOptions:executablePath /usr/bin/google-chrome
 ENV chrome:launchOptions:args --no-sandbox
 ENV templatingEngines:strategy http-server
 
