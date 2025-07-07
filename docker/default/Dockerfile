@@ -12,6 +12,10 @@ RUN apt-get update && \
       ca-certificates \
     && rm -rf /var/lib/apt/lists/* /tmp/*
 
+RUN echo "deb http://deb.debian.org/debian bullseye-backports main" >> /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends chromium/bullseye-backports
+
 VOLUME ["/jsreport"]
 RUN mkdir -p /app
 WORKDIR /app
