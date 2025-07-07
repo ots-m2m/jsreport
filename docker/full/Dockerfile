@@ -25,7 +25,6 @@ RUN adduser --disabled-password --gecos "" jsreport && \
     # node
     curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
     apt-get install -y --no-install-recommends nodejs && \
-    npm i -g npm && \
     # chrome
     apt-get install -y libgconf-2-4 && \
     wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
