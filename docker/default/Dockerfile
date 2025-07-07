@@ -5,7 +5,8 @@ RUN addgroup --system jsreport && adduser --system --ingroup jsreport jsreport
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-      chromium \
+      chromium-driver \
+      chromium-common \
       git \
       bash \
       ca-certificates \
