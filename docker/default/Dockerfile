@@ -22,7 +22,7 @@ VOLUME ["/jsreport"]
 RUN mkdir -p /app
 WORKDIR /app
 
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD false
 
 RUN npm install -g jsreport-cli && \
     jsreport init && \
