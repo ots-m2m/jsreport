@@ -42,6 +42,9 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 RUN npm install -g jsreport-cli && \
     jsreport init && \
     npm uninstall -g jsreport-cli
+    
+RUN apt-get update && apt-get install -y python3 make g++ && \
+    npm install -g node-gyp node-pre-gyp
 
 RUN npm install --save --save-exact jsreport-ejs \
         jsreport-pug \
@@ -80,6 +83,8 @@ RUN node editConfig.js
 
 ADD run.sh /app/run.sh
 COPY . /app
+
+
 
 ENV PATH "$PATH:/fop-2.1"
 ENV NODE_ENV production
