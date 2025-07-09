@@ -7,7 +7,8 @@ RUN adduser --disabled-password --gecos "" jsreport && \
         libgconf-2-4 gnupg git curl wget ca-certificates \
         libgtk2.0-dev libxtst-dev libxss1 libgconf2-dev libnss3-dev \
         libasound2-dev xvfb xfonts-75dpi xfonts-base \
-        default-jre unzip && \
+        default-jre unzip \
+        bzip2 && \
     # java fop
     curl -Lo fop.zip https://archive.apache.org/dist/xmlgraphics/fop/binaries/fop-2.1-bin.zip && \
     unzip fop.zip && \
