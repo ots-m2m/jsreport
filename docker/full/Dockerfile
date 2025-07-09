@@ -50,14 +50,11 @@ RUN npm install --save --save-exact jsreport-ejs \
         jsreport-pug \
         jsreport-azure-storage \
         jsreport-pdf-password \
-        jsreport-phantom-pdf \
-        jsreport-phantom-image \
         jsreport-mssql-store \
         jsreport-postgres-store \
         jsreport-mongodb-store \
         jsreport-wkhtmltopdf \
         jsreport-html-to-text \
-        jsreport-fop-pdf \
         jsreport-html-embedded-in-docx \
         jsreport-fs-store-aws-s3-persistence \
         jsreport-fs-store-azure-storage-persistence \
@@ -75,6 +72,7 @@ RUN npm install --save --save-exact jsreport-ejs \
         @google/maps \
         aws-smtp-credentials \
         moment-timezone \
+        jsreport-chrome-pdf \
     && npm cache clean -f && \
     rm -rf /tmp/*
 
