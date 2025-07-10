@@ -53,6 +53,8 @@ ENV PATH="$PATH:/fop-2.1"
 RUN npm install -g jsreport-cli && \
     jsreport init && \
     npm uninstall -g jsreport-cli
+RUN npm install -g node-pre-gyp
+
 
 # Install all required jsreport extensions and dependencies
 RUN npm install --save --save-exact \
