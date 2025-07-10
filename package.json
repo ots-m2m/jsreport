@@ -91,7 +91,7 @@
     "start": "node server.js"
   },
   "engines": {
-    "node": ">=8.9"
+    "node": ">=16.0.0"
   },
   "main": "index.js",
   "license": "LGPL",
