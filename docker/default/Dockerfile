@@ -1,9 +1,13 @@
 FROM debian:bullseye-slim
-RUN rm -f /etc/apt/sources.list.d/google-chrome.list
+
 EXPOSE 5488
 
-# Install system dependencies
-RUN apt-get update && \
+# Remove any Chrome repo before every apt-get update
+RUN rm -f /etc/apt/sources.list.d/google-chrome.list
+
+# Install system dependencies and Chromium
+RUN rm -f /etc/apt/sources.list.d/google-chrome.list && \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
@@ -29,25 +33,19 @@ RUN apt-get update && \
         fonts-wqy-zenhei \
         fonts-thai-tlwg \
         fonts-kacst \
+        chromium \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js 18 LTS
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    rm -f /etc/apt/sources.list.d/google-chrome.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends nodejs && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Chromium
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends chromium && \
-    rm -rf /var/lib/apt/lists/*
-
-
-
 VOLUME ["/jsreport"]
 
 RUN adduser --disabled-password --gecos "" jsreport
-RUN mkdir -p /app
 WORKDIR /app
 
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
@@ -67,5 +65,9 @@ RUN node editConfig.js
 
 ADD run.sh /app/run.sh
 COPY . /app
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s CMD curl -f http://localhost:5488/api/health || exit 1
+
+USER jsreport
 
 CMD ["bash", "/app/run.sh"]
