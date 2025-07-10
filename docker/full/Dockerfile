@@ -39,6 +39,9 @@ RUN npm install -g jsreport-cli && \
     npm uninstall -g jsreport-cli && \
     npm cache clean -f
 
+# Install aws-sdk in the app directory
+RUN npm install aws-sdk --save
+
 COPY editConfig.js /app/editConfig.js
 RUN node editConfig.js
 
