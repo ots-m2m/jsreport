@@ -17,6 +17,8 @@ RUN apt-get update && \
         libxtst6 libx11-6 libglib2.0-0 xdg-utils xvfb unzip \
     && rm -rf /var/lib/apt/lists/*
 
+
+
 # Fix: Add Google Chrome GPG key and repo securely (2025 compatible)
 RUN mkdir -p /etc/apt/keyrings && \
     curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /etc/apt/keyrings/google-chrome.gpg && \
@@ -27,15 +29,29 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends google-chrome-stable && \
     rm -rf /var/lib/apt/lists/*
 
-# Set working directory
-WORKDIR /home/jsreport
+VOLUME ["/jsreport"]
+RUN mkdir -p /app
+WORKDIR /app
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 
-# Copy dependencies and install jsreport
-COPY package*.json ./
-RUN npm install --production
+RUN npm install -g jsreport-cli && \
+    jsreport init && \
+    npm uninstall -g jsreport-cli && \
+    npm cache clean -f
 
-# Copy rest of app
-COPY . .
+COPY editConfig.js /app/editConfig.js
+RUN node editConfig.js
+
+ADD run.sh /app/run.sh
+COPY . /app
+
+ENV NODE_ENV production
+ENV chrome:launchOptions:executablePath /usr/bin/chromium-browser
+ENV chrome:launchOptions:args --no-sandbox
+ENV templatingEngines:strategy http-server
+
+CMD ["bash", "/app/run.sh"]
+
 
 # Set ownership to non-root user
 RUN chown -R jsreport:jsreport /home/jsreport
@@ -45,5 +61,3 @@ USER jsreport
 
 EXPOSE 5488
 
-# Start jsreport
-CMD ["npx", "jsreport", "start"]
