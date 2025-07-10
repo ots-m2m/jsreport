@@ -53,7 +53,7 @@ RUN npm install --save --save-exact jsreport-ejs \
         jsreport-mssql-store \
         jsreport-postgres-store \
         jsreport-mongodb-store \
-        jsreport-wkhtmltopdf \
+        jsreport-wkhtmltopdf@latest \
         jsreport-html-to-text \
         jsreport-html-embedded-in-docx \
         jsreport-fs-store-aws-s3-persistence \
@@ -64,7 +64,6 @@ RUN npm install --save --save-exact jsreport-ejs \
         promise-serial \
         electron \
         jsreport-electron-pdf \
-        phantomjs-exact-2-1-1 \
         request \
         moment \
         nodemailer \
