@@ -1,94 +1,49 @@
-FROM debian:bullseye
+FROM node:18-slim
+
+ENV NODE_ENV=production \
+    CHROME_BIN=/usr/bin/google-chrome \
+    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
+# Create non-root user
+RUN adduser --disabled-password --gecos "" jsreport
+
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        curl gnupg ca-certificates \
+        libxss1 libappindicator3-1 libasound2 libatk-bridge2.0-0 libnspr4 libnss3 \
+        fonts-liberation libgtk-3-0 libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 \
+        libgbm1 libpango-1.0-0 libcairo2 libatspi2.0-0 libdrm2 libxext6 libxfixes3 libxrender1 \
+        libxtst6 libx11-6 libglib2.0-0 xdg-utils xvfb unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Fix: Add Google Chrome GPG key and repo securely (2025 compatible)
+RUN mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /etc/apt/keyrings/google-chrome.gpg && \
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
+
+# Install Google Chrome
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends google-chrome-stable && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /home/jsreport
+
+# Copy dependencies and install jsreport
+COPY package*.json ./
+RUN npm install --production
+
+# Copy rest of app
+COPY . .
+
+# Set ownership to non-root user
+RUN chown -R jsreport:jsreport /home/jsreport
+
+# Use non-root user
+USER jsreport
+
 EXPOSE 5488
 
-RUN adduser --disabled-password --gecos "" jsreport && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-        libgconf-2-4 gnupg git curl wget ca-certificates \
-        libgtk2.0-dev libxtst-dev libxss1 libgconf2-dev libnss3-dev \
-        libasound2-dev xvfb xfonts-75dpi xfonts-base \
-        default-jre unzip \
-        bzip2 && \
-    # java fop
-    curl -Lo fop.zip https://archive.apache.org/dist/xmlgraphics/fop/binaries/fop-2.1-bin.zip && \
-    unzip fop.zip && \
-    rm fop.zip && \
-    chmod +x fop-2.1/fop && \
-    # node 18
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get install -y --no-install-recommends nodejs && \
-    # chrome
-    wget -q -O /usr/share/keyrings/google-linux-signing-keyring.gpg https://dl.google.com/linux/linux_signing_key.pub && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux-signing-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst && \
-    # phantomjs
-    curl -Lo phantomjs.tar.bz2 https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2 && \
-    tar jxvf phantomjs.tar.bz2 && \
-    chmod +x phantomjs-1.9.8-linux-x86_64/bin/phantomjs && \
-    mv phantomjs-1.9.8-linux-x86_64/bin/phantomjs /usr/local/bin/ && \
-    rm -rf phantomjs* && \
-    # cleanup
-    rm -rf /var/lib/apt/lists/* /var/cache/apt/* && \
-    rm -rf /src/*.deb
-
-VOLUME ["/jsreport"]
-
-RUN mkdir -p /app
-WORKDIR /app
-
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
-
-RUN npm install -g jsreport-cli && \
-    jsreport init && \
-    npm uninstall -g jsreport-cli
-    
-RUN apt-get update && apt-get install -y python3 make g++ && \
-    npm install -g node-gyp node-pre-gyp
-
-RUN npm install --save --save-exact jsreport-ejs \
-        jsreport-pug \
-        jsreport-azure-storage \
-        jsreport-pdf-password \
-        jsreport-mssql-store \
-        jsreport-postgres-store \
-        jsreport-mongodb-store \
-        jsreport-wkhtmltopdf@latest \
-        jsreport-html-to-text \
-        jsreport-html-embedded-in-docx \
-        jsreport-fs-store-aws-s3-persistence \
-        jsreport-fs-store-azure-storage-persistence \
-        jsreport-fs-store-azure-sb-sync \
-        jsreport-fs-store-aws-sns-sync \
-        jsreport-debug \
-        promise-serial \
-        electron \
-        jsreport-electron-pdf \
-        request \
-        moment \
-        nodemailer \
-        inline-css \
-        @google/maps \
-        aws-smtp-credentials \
-        moment-timezone \
-        jsreport-chrome-pdf \
-    && npm cache clean -f && \
-    rm -rf /tmp/*
-
-COPY editConfig.js /app/editConfig.js
-RUN node editConfig.js
-
-ADD run.sh /app/run.sh
-COPY . /app
-
-
-
-ENV PATH "$PATH:/fop-2.1"
-ENV NODE_ENV production
-ENV electron:strategy electron-ipc
-ENV phantom:strategy phantom-server
-ENV templatingEngines:strategy http-server
-ENV chrome_launchOptions_executablePath /usr/bin/google-chrome-stable
-ENV chrome_launchOptions_args --no-sandbox,--disable-dev-shm-usage
-
-CMD ["bash", "/app/run.sh"]
+# Start jsreport
+CMD ["npx", "jsreport", "start"]

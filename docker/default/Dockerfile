@@ -1,52 +1,50 @@
-# Use official Node.js base image
-FROM node:18-slim
-
-# Set environment variables
-ENV NODE_ENV=production \
-    CHROME_BIN=/usr/bin/google-chrome \
-    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-
-# Create non-root jsreport user
-RUN adduser --disabled-password --gecos "" jsreport
-
-# Install required system dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        curl gnupg ca-certificates \
-        libxss1 libappindicator3-1 libasound2 libatk-bridge2.0-0 libnspr4 libnss3 \
-        fonts-liberation libgtk-3-0 libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 \
-        libgbm1 libpango-1.0-0 libcairo2 libatspi2.0-0 libdrm2 libxext6 libxfixes3 libxrender1 \
-        libxtst6 libx11-6 libglib2.0-0 xdg-utils xvfb unzip \
-    && rm -rf /var/lib/apt/lists/*
-
-# Add updated Google Chrome GPG key and repository (2025 secure method)
-RUN mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /etc/apt/keyrings/google-chrome.gpg && \
-    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
-
-# Install Google Chrome
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends google-chrome-stable && \
-    rm -rf /var/lib/apt/lists/*
-
-# Set working directory
-WORKDIR /home/jsreport
-
-# Copy package files and install dependencies
-COPY package*.json ./
-RUN npm install --production
-
-# Copy application files
-COPY . .
-
-# Change ownership
-RUN chown -R jsreport:jsreport /home/jsreport
-
-# Use non-root user
-USER jsreport
-
-# Expose jsreport default port
+FROM ubuntu:xenial
 EXPOSE 5488
 
-# Start jsreport
-CMD ["npx", "jsreport", "start"]
+RUN adduser --disabled-password --gecos "" jsreport && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        git \
+        bash \
+        ca-certificates \
+        wget \
+        curl \
+        python \
+        make \
+        g++ \
+        libgconf-2-4 \
+        libgtk2.0-dev libxtst-dev libxss1 libgconf2-dev libnss3-dev \
+        libasound2-dev xvfb xfonts-75dpi xfonts-base \
+        default-jre unzip bzip2 && \
+    # chromium
+    apt-get install -y chromium-browser && \
+    # node 16 (modern, hummus-free)
+    curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
+    apt-get install -y --no-install-recommends nodejs && \
+    # cleanup
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/* && \
+    rm -rf /tmp/*
+
+VOLUME ["/jsreport"]
+RUN mkdir -p /app
+WORKDIR /app
+
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+
+RUN npm install -g jsreport-cli && \
+    jsreport init && \
+    npm uninstall -g jsreport-cli && \
+    npm cache clean -f
+
+COPY editConfig.js /app/editConfig.js
+RUN node editConfig.js
+
+ADD run.sh /app/run.sh
+COPY . /app
+
+ENV NODE_ENV production
+ENV chrome:launchOptions:executablePath /usr/bin/chromium-browser
+ENV chrome:launchOptions:args --no-sandbox
+ENV templatingEngines:strategy http-server
+
+CMD ["bash", "/app/run.sh"]
