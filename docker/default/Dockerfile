@@ -1,73 +1,49 @@
-FROM debian:bullseye-slim
+FROM node:18-slim
 
-EXPOSE 5488
+# Set environment variables
+ENV JSREPORT_VERSION=3.13.0 \
+    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    NODE_ENV=production \
+    CHROME_BIN=/usr/bin/google-chrome
 
-# Remove any Chrome repo before every apt-get update
-RUN rm -f /etc/apt/sources.list.d/google-chrome.list
+# Create non-root user
+RUN adduser --disabled-password --gecos "" jsreport
 
-# Install system dependencies and Chromium
-RUN rm -f /etc/apt/sources.list.d/google-chrome.list && \
-    apt-get update && \
+# Install required packages and Chrome public key
+RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        ca-certificates \
-        curl \
-        wget \
-        git \
-        bash \
-        python3 \
-        make \
-        g++ \
-        libgconf-2-4 \
-        libgtk2.0-0 \
-        libxtst6 \
-        libxss1 \
-        libnss3 \
-        libasound2 \
-        xvfb \
-        xfonts-75dpi \
-        xfonts-base \
-        default-jre \
-        unzip \
-        bzip2 \
-        fonts-ipafont-gothic \
-        fonts-wqy-zenhei \
-        fonts-thai-tlwg \
-        fonts-kacst \
-        chromium \
-    && rm -rf /var/lib/apt/lists/*
+        gnupg curl wget ca-certificates \
+        libxss1 libappindicator3-1 libasound2 libatk-bridge2.0-0 libnspr4 libnss3 \
+        fonts-liberation libgtk-3-0 libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 \
+        libgbm1 libpango-1.0-0 libcairo2 libatspi2.0-0 libdrm2 libxext6 libxfixes3 libxrender1 \
+        libxtst6 libx11-6 libglib2.0-0 xdg-utils xvfb unzip \
+        && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js 18 LTS
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    rm -f /etc/apt/sources.list.d/google-chrome.list && \
+# Add Google Chrome repo and key
+RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-linux-signing-key.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux-signing-key.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
     apt-get update && \
-    apt-get install -y --no-install-recommends nodejs && \
+    apt-get install -y google-chrome-stable && \
     rm -rf /var/lib/apt/lists/*
 
-VOLUME ["/jsreport"]
+# Set working directory
+WORKDIR /home/jsreport
 
-RUN adduser --disabled-password --gecos "" jsreport
-WORKDIR /app
+# Install jsreport (you can change this to use a custom jsreport config/project)
+COPY package*.json ./
+RUN npm install --production
 
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV NODE_ENV=production
-ENV chrome:launchOptions:executablePath=/usr/bin/chromium
-ENV chrome:launchOptions:args=--no-sandbox,--disable-dev-shm-usage
-ENV templatingEngines:strategy=http-server
+# Copy rest of the app
+COPY . .
 
-# Install jsreport and initialize
-RUN npm install -g jsreport-cli && \
-    jsreport init && \
-    npm uninstall -g jsreport-cli && \
-    npm cache clean --force
+# Change ownership
+RUN chown -R jsreport:jsreport /home/jsreport
 
-COPY editConfig.js /app/editConfig.js
-RUN node editConfig.js
-
-ADD run.sh /app/run.sh
-COPY . /app
-
-HEALTHCHECK --interval=30s --timeout=5s --start-period=30s CMD curl -f http://localhost:5488/api/health || exit 1
-
+# Switch to non-root user
 USER jsreport
 
-CMD ["bash", "/app/run.sh"]
+# Expose port
+EXPOSE 5488
+
+# Start jsreport
+CMD ["npx", "jsreport", "start"]
