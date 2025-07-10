@@ -33,6 +33,7 @@ jobs:
               fi
               docker tag gridthings/jsreport:latest 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/jsreport:$gitHash
               docker push 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/jsreport:$gitHash
+              
 workflows:
   version: 2
   build_and_deploy:
