@@ -17,6 +17,7 @@ RUN apt-get update && \
         libxtst6 libx11-6 libglib2.0-0 xdg-utils xvfb unzip \
         libgconf-2-4 libgtk2.0-dev libxtst-dev libgconf2-dev libnss3-dev libasound2-dev \
         xfonts-75dpi xfonts-base default-jre \
+        bzip2 curl gnupg ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Apache FOP
