@@ -1,5 +1,5 @@
 FROM debian:bullseye-slim
-
+RUN rm -f /etc/apt/sources.list.d/google-chrome.list
 EXPOSE 5488
 
 # Install system dependencies
@@ -42,7 +42,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends chromium && \
     rm -rf /var/lib/apt/lists/*
 
-RUN rm -f /etc/apt/sources.list.d/google-chrome.list
+
 
 VOLUME ["/jsreport"]
 
