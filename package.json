@@ -70,7 +70,8 @@
     "jsreport-xlsx": "2.0.8",
     "mkdirp": "0.5.1",
     "puppeteer": "1.11.0",
-    "semver": "5.6.0"
+    "semver": "5.6.0",
+    "jsreport-wkhtmltopdf": "^3.0.0"
   },
   "devDependencies": {
     "cross-env": "5.2.0",

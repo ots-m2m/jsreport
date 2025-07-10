@@ -31,7 +31,7 @@ ADD run.sh /app/run.sh
 COPY . /app
 
 ENV NODE_ENV production
-ENV chrome:launchOptions:executablePath /usr/lib/chromium/chrome
+ENV chrome:launchOptions:executablePath /usr/lib/chromium/chromium
 ENV chrome:launchOptions:args --no-sandbox
 ENV templatingEngines:strategy http-server
 
