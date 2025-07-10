@@ -13,16 +13,31 @@ jobs:
       - run: docker build --rm=false -t gridthings/jsreport ./docker/full
       - deploy:
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
               apk update
               apk add py-pip
-              pip install awscli
+              pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org awscli
               aws configure set default.region ap-southeast-2
               aws configure set default.output json
               eval $(aws ecr get-login)
-              docker tag gridthings/jsreport:latest 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/jsreport:latest
-              docker push 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/jsreport:latest
               gitHash=$(git rev-parse --short HEAD)
+              if [ -n "${CIRCLE_TAG}" ]; then
+                docker tag gridthings/jsreport:latest 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/jsreport:${CIRCLE_TAG}
+                docker push 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/jsreport:${CIRCLE_TAG}
+              elif [ "${CIRCLE_BRANCH}" == "master" ]; then
+                docker tag gridthings/jsreport:latest 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/jsreport:latest
+                docker push 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/jsreport:latest
+              else
+                branch=$(echo $CIRCLE_BRANCH | sed 's/\//-/g')
+                docker tag gridthings/jsreport:latest 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/jsreport:"$branch"-latest
+                docker push 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/jsreport:"$branch"-latest
+              fi
               docker tag gridthings/jsreport:latest 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/jsreport:$gitHash
               docker push 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/jsreport:$gitHash
-            fi
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
